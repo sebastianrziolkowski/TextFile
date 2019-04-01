@@ -1,0 +1,58 @@
+
+	std::ifstream input;
+	std::string pom;
+	std::string temp;
+	int id;
+	int height;
+	int width;
+	std::string tag;
+	input.open("images.txt");
+	input >> pom;
+
+
+	while (!input.eof())
+	{
+		input >> pom;
+		int i = 0;
+		while (pom.at(i) != ',')
+		{
+			temp += pom.at(i);
+			i++;
+		}
+		id = std::atoi(temp.c_str());
+		temp = "";
+		i++;
+
+		while (pom.at(i) != ',')
+		{
+			temp += pom.at(i);
+			i++;
+		}
+		height = std::atoi(temp.c_str());
+		temp = "";
+		i++;
+		while (pom.at(i) != ',')
+		{
+			temp += pom.at(i);
+			i++;
+		}
+		width = std::atoi(temp.c_str());
+		temp = "";
+		i++;
+		Photo photo(id, height, width);
+
+		while (i < (int)pom.length())
+		{
+			while (i < (int)pom.length() && pom.at(i) != ',')
+			{
+				temp += pom.at(i);
+				i++;
+			}
+			temp += " ";
+			photo.tagList.push_front(temp);
+			temp = "";
+			i++;
+		}
+
+
+	}
