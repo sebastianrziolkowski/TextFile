@@ -35,21 +35,56 @@ int FileManager::findTag(const char *tag)
 	int counter = 0;
 	for (int i = 0; i < this->tabSize; i++)
 	{
-		if (std::find(photoArray[i].tagList.begin, photoArray[i].tagList.end, tag) == tag)
-			counter++;
+		for (auto v : this->photoArray[i].tagList)
+			if (v == tag)
+			{
+				counter++;
+			}
+			
 	}
 	return counter;
 }
 
 
-void FileManager::addPhoto(int id, int height, int width, std::string tagsArray[], int tagArraySize)
+void FileManager::showTags()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		std::cout << "Tags for id: " << photoArray[i].getId() << " ";
+		photoArray[i].showList();
+	}
+}
+
+void FileManager::addPhoto(int id, int height, int width, std::string tagsArray[], int arrayStringSize)
 {
 	photoArray[id] = Photo(id, height, width);
 	photoArray[id].tagList.clear();
-	for (int i = 0; i < tagArraySize; i++)
+	std::string tagString;
+	for (int i = 0; i < arrayStringSize; i++)
 	{
-		photoArray[id].tagList.push_front(tagsArray[i]);
+		photoArray[id].tagList.push_back(tagsArray[i]);
+		tagString += "," + tagsArray[i];
 	}
+	std::string temp = "\n" + std::to_string(id) + "," + std::to_string(height) + "," + std::to_string(width) + tagString;
+	
+	input.close();
+
+	output.open(fileName, std::ios_base::app);
+	if (!output.good())
+	{
+		throw "Open output file erro.";
+	}
+
+	output << temp;
+
+	output.close();
+	input.open(fileName);
+	if (!input.good())
+	{
+		throw "Reopen input file erro.";
+	}
+
+
 }
 
 void FileManager::loadFile()
@@ -101,7 +136,7 @@ void FileManager::loadFile()
 				temp += pom.at(i);
 				i++;
 			}
-			photoArray[id].tagList.push_front(temp);
+			photoArray[id].tagList.push_back(temp);
 			temp = "";
 			i++;
 		}

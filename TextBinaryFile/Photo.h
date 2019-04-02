@@ -9,8 +9,10 @@ private:
 	int height;
 	int width;
 public:
-	void setVariable(int, int, int);
+	const int getId() const;
 	std::list<std::string> tagList;
+	void showList();
+	void setVariable(int, int, int);
 	Photo(int,int,int);
 	Photo();
 	~Photo();
